@@ -29,19 +29,25 @@ const matchSound = new Audio("match.mp3");
 const winSound = new Audio("win.mp3");
 const loseSound = new Audio("lose.mp3");
 
-// Initialize game
-function initGame() {
-    gameBoard.innerHTML = "";
+// **Fix: Reset only the game board without duplicating UI elements**
+function resetUI() {
     gameResult.innerHTML = "";
     restartButton.style.display = "none";
+    chancesDisplay.textContent = `Chances Left: ${chancesLeft}`;
+    scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
+}
+
+// **Fix: Ensure Restart Clears Game Board Properly**
+function initGame() {
+    gameBoard.innerHTML = "";
     chancesLeft = 8;
     matchedPairs = 0;
     score = 0;
     firstCard = null;
     secondCard = null;
     lockBoard = false;
-    chancesDisplay.textContent = `Chances Left: ${chancesLeft}`;
-    scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
+    
+    resetUI();
 
     shuffle(images).forEach((imgSrc) => {
         const card = document.createElement("div");
@@ -67,13 +73,13 @@ function initGame() {
     });
 }
 
-// Check for match
+// **Fix: Properly Update Score & High Score**
 function checkMatch() {
     if (firstCard.innerHTML === secondCard.innerHTML) {
         matchSound.play();
         matchedPairs++;
         score += 10;
-        scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
+        updateScore();
 
         if (matchedPairs === images.length / 2) {
             gameOver(true);
@@ -83,8 +89,7 @@ function checkMatch() {
     } else {
         chancesLeft--;
         score -= 5;
-        scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
-        chancesDisplay.textContent = `Chances Left: ${chancesLeft}`;
+        updateScore();
         
         if (chancesLeft === 0) {
             gameOver(false);
@@ -96,6 +101,12 @@ function checkMatch() {
             }, 1000);
         }
     }
+}
+
+// **Fix: Ensure UI updates correctly without duplication**
+function updateScore() {
+    scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
+    chancesDisplay.textContent = `Chances Left: ${chancesLeft}`;
 }
 
 // Handle game over
@@ -118,7 +129,7 @@ function gameOver(isWin) {
         gameResult.style.color = "red";
     }
 
-    scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
+    updateScore();
 }
 
 // Reset turn
