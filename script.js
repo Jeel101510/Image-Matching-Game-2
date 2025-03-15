@@ -4,7 +4,7 @@ const images = [
     "img5.jpg", "img5.jpg", "img6.jpg", "img6.jpg"
 ];
 
-// Shuffle images
+// Shuffle function
 function shuffle(array) {
     return array.sort(() => 0.5 - Math.random());
 }
@@ -29,17 +29,18 @@ const matchSound = new Audio("match.mp3");
 const winSound = new Audio("win.mp3");
 const loseSound = new Audio("lose.mp3");
 
-// **Fix: Reset only the game board without duplicating UI elements**
+// **Fix: Reset UI without duplicating headings**
 function resetUI() {
     gameResult.innerHTML = "";
     restartButton.style.display = "none";
+    
     chancesDisplay.textContent = `Chances Left: ${chancesLeft}`;
     scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
 }
 
 // **Fix: Ensure Restart Clears Game Board Properly**
 function initGame() {
-    gameBoard.innerHTML = "";
+    gameBoard.innerHTML = ""; // Clears previous cards
     chancesLeft = 8;
     matchedPairs = 0;
     score = 0;
@@ -105,8 +106,8 @@ function checkMatch() {
 
 // **Fix: Ensure UI updates correctly without duplication**
 function updateScore() {
-    scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
     chancesDisplay.textContent = `Chances Left: ${chancesLeft}`;
+    scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
 }
 
 // Handle game over
